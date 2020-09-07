@@ -5,17 +5,16 @@
   <body></body>
 
   <script>
+
+  let possibleChoices = ["Rock", "Paper", "Scissors"];
+
     function computerPlay() {
-      let possibleResponses = ["Rock", "Paper", "Scissors"];
+     
       let randomNumber = Math.floor(Math.random() * 3);
-      return possibleResponses[randomNumber];
+      return possibleChoices[randomNumber];
     }
 
     function playRound(playerSelection, computerSelection) {
-
-
-      let possibleChoices = ["Rock", "Paper", "Scissors"];
-
         
       playerSelection =
         playerSelection.substr(0, 1).toUpperCase() +
