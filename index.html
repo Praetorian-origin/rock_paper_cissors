@@ -2,86 +2,83 @@
 <html>
   <head> </head>
 
-  <body></body>
+  <body>
+    <button id="rock">Rock</button>
+    <button id="paper">Paper</button>
+    <button id="scissors">Scissors</button>
+
+    <div id="roundResult"></div>
+    <div id="gameResult"></div>
+  </body>
 
   <script>
+    const buttons = document.querySelectorAll("button");
+    let possibleChoices = ["Rock", "Paper", "Scissors"];
+    let computerScore = 0;
+    let playerScore = 0;
+    const divGameResult = document.getElementById("gameResult");
+    const divRoundResult = document.getElementById("roundResult");
 
-  let possibleChoices = ["Rock", "Paper", "Scissors"];
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        divGameResult.textContent = "";
+        const playerChoice = button.id;
+        playRound(playerChoice);
+
+      });
+    });
+
+    function checkScore() {
+      
+      if (computerScore < 5 && playerScore < 5) return;
+
+      let winner = "";
+      if (computerScore == 5) {
+        winner = "Computer";
+      } else if (playerScore == 5) {
+        winner = "Player";
+      }
+
+      divGameResult.textContent = `${winner} wins, Player score: ${playerScore}, Computer Score : ${computerScore}`;
+      playerScore = 0;
+      computerScore = 0;
+    }
 
     function computerPlay() {
-     
       let randomNumber = Math.floor(Math.random() * 3);
       return possibleChoices[randomNumber];
     }
 
-    function playRound(playerSelection, computerSelection) {
-        
+    function playRound(playerSelection) {
+
+      const computerSelection = computerPlay();
       playerSelection =
         playerSelection.substr(0, 1).toUpperCase() +
         playerSelection.substr(1, playerSelection.length - 1).toLowerCase();
 
-        if(!possibleChoices.includes(playerSelection)) {
-          return "You Lose! Invalid input";
-        }
+      if (!possibleChoices.includes(playerSelection)) {
+        computerScore++;
+         divRoundResult.textContent = "You Lose! Invalid input";
+         return;
+      }
 
-      // Losing conditions
-      if (playerSelection == "Rock" && computerSelection == "Paper") {
-        return "You Lose! Paper beats Rock";
+      // Compare both choices, declare if winner or loser and why
+      let result = computerSelection + " " + playerSelection;
+      if (computerSelection === playerSelection) {
+         divRoundResult.textContent = "YOU'RE TIED!, " + playerSelection + " = " + computerSelection;
       } else if (
-        playerSelection == "Paper" &&
-        computerSelection == "Scissors"
+        result === "Rock Paper" ||
+        result === "Paper Scissors" ||
+        result === "Scissors Rock"
       ) {
-        return "You Lose! Scissors beats Paper";
-      } else if (playerSelection == "Scissors" && computerSelection == "Rock") {
-        return "You Lose! Rock beats Scissors";
+        playerScore++;
+         divRoundResult.textContent = `You win, ${playerSelection} beats ${computerSelection}`;
+      } else {
+        computerScore++;
+         divRoundResult.textContent = `You loose, ${computerSelection} beats ${playerSelection}`;
       }
-
-      // Winning conditions
-      else if (playerSelection == "Scissors" && computerSelection == "Paper") {
-        return "You Win! Scissors beats Paper";
-      } else if (playerSelection == "Rock" && computerSelection == "Scissors") {
-        return "You Win! Rock beats Scissors";
-      } else if (playerSelection == "Paper" && computerSelection == "Rock") {
-        return "You Win! Paper beats Rock";
-      }
-
-      // if no condition is matched
-      else {
-        return "That's a match!, " + playerSelection + " = " + computerSelection;
-      }
-    }
-
-    function game() {
-      let i;
-      let playerScore = 0;
-      let computerScore = 0;
-
-      for (i = 0; i < 5; i++) {
-        let playerSelection = prompt(
-          "Please choose between Paper, Rock, Scissors"
-        );
-        let computerSelection = computerPlay();
-        let result = playRound(playerSelection, computerSelection);
-        console.log(result);
-
-        if (result.includes("Win")) {
-          playerScore++;
-        } else if (result.includes("Lose")) {
-          computerScore++;
-        }
-      }
-
-      console.log("Game is over");
-      console.log("Player score: " + playerScore);
-      console.log("Computer score: " + computerScore);
-      if (playerScore > computerScore) {
-        console.log("Player wins");
-      } else if (playerScore < computerScore) {
-        console.log("Computer wins");
-      }
-        else {
-          console.log("No one loses and no one wins !")
-        }
+      
+      checkScore();
     }
   </script>
 </html>
